@@ -47,7 +47,7 @@ const TIER_CONFIG = {
     starsCount: 130,
     particleCount: 0,
     dpr: [1, 1],
-    useTransmission: true, // User wants EXACT same color/look as PC
+    useTransmission: false, // disabled transmission (FBO pass) to prevent mobile freezes
     floatSpeed: 0.8,
     antialias: false,
     // Centered slightly right so it's behind the text like PC
@@ -108,12 +108,14 @@ function TorusKnotChrome({ args }) {
         like the PC glass version (dark with purple/blue highlights).
       */}
       <meshPhysicalMaterial
-        color="#0c0320"
-        metalness={0.92}
+        color="#7C3AED"
+        emissive="#2e1065"
+        emissiveIntensity={0.2}
+        metalness={0.9}
         roughness={0.08}
         clearcoat={1}
-        clearcoatRoughness={0.06}
-        envMapIntensity={4}
+        clearcoatRoughness={0.05}
+        envMapIntensity={2.5}
         reflectivity={1}
       />
     </TorusKnot>
@@ -186,11 +188,8 @@ function Scene({ config }) {
         mobile/tablet uses "night" for dark chrome reflections that match
         the dark metallic look in the PC screenshot.
       */}
-      {config.useTransmission ? (
-        <Environment preset="city" />
-      ) : (
-        <Environment preset="night" />
-      )}
+      {/* Use city environment for both so the reflections are bright and consistent */}
+      <Environment preset="city" />
 
       <Float
         position={config.objectPosition}
